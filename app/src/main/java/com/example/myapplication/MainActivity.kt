@@ -1,105 +1,33 @@
 package com.example.myapplication
 
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 
-class MainActivity : ComponentActivity(), View.OnClickListener {
-    lateinit var etCiudad:EditText
-    lateinit var btAdicionar:Button
-    lateinit var btEliminar:Button
-    lateinit var lvCiudad:ListView
-
-    lateinit var adapterCiudades: ArrayAdapter<String>
-    lateinit var listCiudad:MutableList<String>
-    lateinit var sCiudad:String
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list)
+        setContentView(R.layout.activity_main)
 
+        val name: TextView = findViewById(R.id.name)
+        val lastname: TextView = findViewById(R.id.lastname)
+        val email: TextView = findViewById(R.id.email)
+        val submit: Button = findViewById(R.id.submitResponse)
+        val text: TextView = findViewById(R.id.textView6)
 
-        btAdicionar= findViewById(R.id.butnAdicionar)
-        etCiudad= findViewById(R.id.editTextCiudad)
-        lvCiudad= findViewById(R.id.LvCiudades)
-        btAdicionar.setOnClickListener(this)
-        btEliminar= findViewById(R.id.delete)
+        submit.setOnClickListener {
 
-        listCiudad= arrayListOf(
-            "Bogota",
-            "Cali",
-            "Medellin",
-        )
+            // Crear el Intent para iniciar ResponseActivity
+            val intent = Intent(this, ResponseActivity::class.java)
 
-        adapterCiudades= ArrayAdapter(this, android.R.layout.simple_list_item_1, listCiudad)
-        adapterCiudades.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        lvCiudad.adapter=adapterCiudades
+            // Pasar la variable 'name' a la siguiente actividad
+            intent.putExtra("NAME", name.text.toString())
+            intent.putExtra("LASTNAME", lastname.text.toString())
+            intent.putExtra("EMAIL", email.text.toString())
 
-        var selectedView: View? = null
-
-        lvCiudad.setOnItemClickListener { parent, view, position, id ->
-            sCiudad = listCiudad[position]
-
-            selectedView?.setBackgroundColor(Color.TRANSPARENT)
-            view.setBackgroundColor(Color.parseColor("#FFC107"))
-            selectedView = view
+            startActivity(intent)
         }
-
-        btEliminar.setOnClickListener {
-            listCiudad.remove(sCiudad)
-            adapterCiudades.notifyDataSetChanged()
-        }
-
-        btAdicionar.setOnClickListener {
-            sCiudad= etCiudad.text.toString()
-
-            if (sCiudad.isEmpty()){
-                etCiudad.error="Debe ingresar una ciudad"
-                return@setOnClickListener
-            } else if (listCiudad.contains(sCiudad)){
-                etCiudad.error="La ciudad ya existe"
-                return@setOnClickListener
-            }
-
-            listCiudad.add(sCiudad)
-            adapterCiudades.notifyDataSetChanged()
-        }
-
-
-
-//        setContentView(R.layout.activity_main)
-//        val name: TextView = findViewById(R.id.name)
-//        val lastname: TextView = findViewById(R.id.lastname)
-//        val email: TextView = findViewById(R.id.email)
-//        val submit: Button = findViewById(R.id.submit)
-//        val data: CheckBox = findViewById(R.id.data)
-//
-//        val text: TextView = findViewById(R.id.textView6)
-//
-//        submit.setOnClickListener{
-//
-//            if (name.text.isEmpty() || lastname.text.isEmpty() || email.text.isEmpty()) {
-//                text.text = "Please change the empty fields"
-//                return@setOnClickListener
-//            }
-//
-//            if (!data.isChecked) {
-//                text.text = "Terms and conditions"
-//                return@setOnClickListener
-//            }
-//
-//            text.text = "${name.text} ${lastname.text}"
-//        }
-
-    }
-
-    override fun onClick(v: View?) {
-        TODO("Not yet implemented")
     }
 }
